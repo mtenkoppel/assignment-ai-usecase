@@ -1,0 +1,54 @@
+nlu:
+- intent: greet
+  examples: |
+    - Hi
+    - Hey!
+    - Hallo
+    - Good day
+    - Good morning
+
+- intent: subscribe
+  examples: |
+    - I want to get the newsletter
+    - Can you send me the newsletter?
+    - Can you sign me up for the newsletter?
+
+- intent: inform
+  examples: |
+    - My email is example@example.com
+    - random@example.com
+    - Please send it to anything@example.com
+    - Email is something@example.com
+    - [afghan](cuisine) food
+    - how bout [asian oriental](cuisine)
+    - what about [indian](cuisine)
+    - um [english](cuisine)
+    - for ten people
+    - 2 people
+    - for three people
+    - just for one person
+    - book for seven people
+    - 2 please
+    - nine people
+
+- intent: request_restaurant
+  examples: |
+    - im looking for a restaurant
+    - can i get [swedish](cuisine) food in any area?
+    - a restaurant that serves [caribbean](cuisine) food
+    - i'd like a restaurant
+    - im looking for a restaurant that serves [mediterranean](cuisine) food
+    - can i find a restaurant that serves [chinese](cuisine)
+
+- intent: affirm
+  examples: |
+    - yes
+    - yes, please
+    - yup
+
+- intent: deny
+  examples: |
+    - no don't
+    - no
+    - no i don't want that
+

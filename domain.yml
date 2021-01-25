@@ -1,0 +1,76 @@
+version: '2.0'
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
+intents:
+- greet
+- inform
+- subscribe
+- request_restaurant
+- affirm
+- deny
+slots:
+  email:
+    type: unfeaturized
+    influence_conversation: false
+  cuisine:
+    type: text
+    auto_fill: false
+    influence_conversation: false
+  num_people:
+    type: float
+    auto_fill: false
+    influence_conversation: false
+  outdoor_seating:
+    type: text
+    auto_fill: false
+    influence_conversation: false
+
+responses:
+  utter_greet:
+  - text: |
+      Hello! How can I help you?
+  - text: |
+      Hi!
+  utter_ask_email:
+  - text: |
+      What is your email address?
+  utter_subscribed:
+  - text: |
+      Check your inbox at {email} in order to finish subscribing to the newsletter!
+  - text: You're all set! Check your inbox at {email} to confirm your subscription.
+  utter_ask_cuisine:
+    - text: "What cuisine?"
+  utter_ask_num_people:
+    - text: "How many people"
+  utter_ask_outdoor_seating:
+    - text: "Do you want to sit outside?"
+  utter_submit:
+    - text: "All done!"
+  utter_slots_values:
+    - text: "I am finding: cuisine: {cuisine}, num_people: {num_people}, outdoor_seating: {outdoor_seating}"
+actions:
+- '...'
+- utter_greet
+- utter_subscribed
+forms:
+  newsletter_form:
+    email:
+    - type: from_text
+  restaurant_form:
+    cuisine:
+      - type: from_entity
+        entity: cuisine
+    num_people:
+      - type: from_entity
+        entity: number
+    outdoor_seating:
+      - type: from_intent
+        intent: affirm
+        value: true
+      - type: from_intent
+        intent: deny
+        value: false
+entities:
+  - cuisine
+  - number

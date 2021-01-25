@@ -1,0 +1,11 @@
+forms:
+  newsletter_form:
+    email:
+    - type: from_text
+  restaurant_form:
+    cuisine:
+      - type: from_entity
+        entity: cuisine
+      num_people:
+        - type: from_entity
+        entity: number

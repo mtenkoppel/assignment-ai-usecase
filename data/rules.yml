@@ -1,0 +1,31 @@
+rules:
+  - rule: activate subscribe form
+    steps:
+    - intent: subscribe
+    - action: newsletter_form
+    - active_loop: newsletter_form
+
+  - rule: submit form
+    condition:
+    - active_loop: newsletter_form
+    steps:
+    - action: newsletter_form
+    - active_loop: null
+    - action: utter_subscribed
+
+  - rule: activate restaurant from
+    steps:
+      - intent: request_restaurant
+      - action: restaurant_form
+      - active_loop: restaurant_form
+
+  - rule: submit form
+    condition:
+      - active_loop: restaurant_form
+    steps:
+      - action: restaurant_form
+      - active_loop: null
+      - action: utter_submit
+      - action: utter_slots_values
+
+
