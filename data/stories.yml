@@ -1,8 +1,25 @@
+# make sure the indenting is right otherwise the intent wont be recognised
 stories:
- - story: greet and subscribe
-   steps:
-   - intent: greet
-   - action: utter_greet
-   - intent: subscribe
-   - action: newsletter_form
-   - active_loop: newsletter_form
+  - story: User enters the chat and a subtle push in right direction
+    steps:
+    - intent: greet
+    - action: utter_welcome_part1
+    - action: utter_welcome_part2
+
+  - story: user wants to talk to a human
+    steps:
+    - intent: talk_to_human
+    - action: utter_handover_confirm
+    - intent: yes_talk
+    - action: utter_handover_confirmed
+
+  - story: user wants to talk to a human but then canceles
+    steps:
+    - intent: talk_to_human
+    - action: utter_handover_confirm
+    - intent: no_talk
+    - action: utter_handover_aborted
+
+
+
+

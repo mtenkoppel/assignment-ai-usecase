@@ -1,31 +1,159 @@
 rules:
-  - rule: activate subscribe form
+  - rule: respond to FAQs type questions
     steps:
-    - intent: subscribe
-    - action: newsletter_form
-    - active_loop: newsletter_form
+    - intent: faq
+    - action: utter_faq
+  - rule: respond to chitchat
+    steps:
+    - intent: chitchat
+    - action: utter_chitchat
 
-  - rule: submit form
-    condition:
-    - active_loop: newsletter_form
+# BOOKING PART 1 - ENTERING BASIC ITERNARY DATA
+
+## ACTIVATE:
+  - rule: activate booking form
     steps:
-    - action: newsletter_form
+      - intent: book_hotel
+      - action: utter_start_booking
+      - action: book_form
+      - active_loop: book_form
+
+## ROBUST AGAINST CHITCHAT:
+  - rule: The user is in the booking form and wants to make chitchat
+    condition:
+    # Condition that form is active.
+    - active_loop: book_form
+    steps:
+    # This unhappy path handles the case of an intent `chitchat`.
+    - intent: chitchat
+    - action: utter_chitchat
+    # Return to form after handling the `chitchat` intent
+    - action: book_form
+    - active_loop: book_form
+
+## ROBUST AGAINST QUESTIONS THE USER MIGHT HAVE:
+  - rule: The user is in the booking form and has a question to the hotel
+    condition:
+    # Condition that form is active.
+    - active_loop: book_form
+    steps:
+    # This unhappy path handles the case of an intent `faq`.
+    - intent: faq
+    - action: utter_faq
+    # Return to form after handling the `faq` intent
+    - action: book_form
+    - active_loop: book_form
+
+## ALLOW FOR CANCELING THE FORM
+  - rule: The user is in the booking form and wants to abort the process
+    condition:
+    # Condition that form is active.
+    - active_loop: book_form
+    steps:
+    # This unhappy path handles the case of an intent `chitchat`.
+    - intent: abort
+    # After the user expresses abort, we stop the hotel booking form
+    - action: utter_confirm_abort
+    - action: action_deactivate_loop
     - active_loop: null
-    - action: utter_subscribed
+    - action: reset_form_values
 
-  - rule: activate restaurant from
-    steps:
-      - intent: request_restaurant
-      - action: restaurant_form
-      - active_loop: restaurant_form
 
-  - rule: submit form
+## SUBMIT (after submit the
+  - rule: submit book form
     condition:
-      - active_loop: restaurant_form
+      - active_loop: book_form
     steps:
-      - action: restaurant_form
+      - action: book_form
       - active_loop: null
-      - action: utter_submit
-      - action: utter_slots_values
+      - action: action_find_offer
+      - action: utter_how_to_proceed
 
+# BOOKING PART 2
+## ACTIVATE
+  - rule: the user has inputted basic hotel data and has received an offer. He has no questions and wants to process further
+    steps:
+      - intent: continue_processing_form
+      - action: process_book
+      - active_loop: process_book
+
+## ROBUST AGAINST CHITCHAT:
+  - rule: The user is in the booking form and wants to make chitchat
+    condition:
+    # Condition that form is active.
+    - active_loop: process_book
+    steps:
+    # This unhappy path handles the case of an intent `chitchat`.
+    - intent: chitchat
+    - action: utter_chitchat
+    # Return to form after handling the `chitchat` intent
+    - action: process_book
+    - active_loop: process_book
+
+## ROBUST AGAINST QUESTIONS THE USER MIGHT HAVE:
+  - rule: The user is in the booking form and has a question to the hotel
+    condition:
+    # Condition that form is active.
+    - active_loop: process_book
+    steps:
+    # This unhappy path handles the case of an intent `faq`.
+    - intent: faq
+    - action: utter_faq
+    # Return to form after handling the `faq` intent
+    - action: process_book
+    - active_loop: process_book
+
+## ALLOW FOR CANCELING THE FORM
+  - rule: The user is in the booking form and wants to abort the process
+    condition:
+    # Condition that form is active.
+    - active_loop: process_book
+    steps:
+    # This unhappy path handles the case of an intent `chitchat`.
+    - intent: abort
+    # After the user expresses abort, we stop the hotel booking form
+    - action: utter_confirm_abort
+    - action: action_deactivate_loop
+    - active_loop: null
+
+## SUBMITTING
+  - rule: user finished part two form
+    condition:
+      - active_loop: process_book
+    steps:
+    - action: process_book
+    - active_loop: null
+    - action: action_process_offer
+    - action: utter_confirm_process
+
+
+  - rule: user confirm the final booking
+    steps:
+    - intent: bookconfirm_yes
+    - action: utter_bookconfirmed
+    - action: reset_form_values
+    - action: utter_welcome_part2
+
+  - rule: cancel final bookin
+    steps:
+    - intent: bookconfirm_no
+    - action: utter_booknotconfirmed
+    - action: reset_form_values
+    - action: utter_welcome_part2
+
+## GENERAL INTENTS
+
+
+# activate asking a question
+  - rule: user has a question to the hotel
+    steps:
+      - intent: ask_question
+      - action: utter_ask_your_question
+
+# reset chatbot
+  - rule: user wants to reset and start over
+    steps:
+      - intent: reset
+      - action: utter_resetting
+      - action: action_hello_world
 
