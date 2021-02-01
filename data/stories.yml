@@ -1,10 +1,6 @@
 # make sure the indenting is right otherwise the intent wont be recognised
 stories:
-  - story: User enters the chat and a subtle push in right direction
-    steps:
-    - intent: greet
-    - action: utter_welcome_part1
-    - action: utter_welcome_part2
+
 
   - story: user wants to talk to a human
     steps:

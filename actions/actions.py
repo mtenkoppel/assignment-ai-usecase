@@ -11,7 +11,7 @@ from typing import Any, Text, Dict, List
 
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
-from rasa_sdk.events import AllSlotsReset
+from rasa_sdk.events import AllSlotsReset, FollowupAction, Form, ActiveLoop
 from rasa_sdk.events import SlotSet
 from datetime import datetime
 from rasa_sdk import Tracker, FormValidationAction
@@ -163,3 +163,62 @@ class ValidateRestaurantForm(FormValidationAction):
             # user will be asked for the slot again
             dispatcher.utter_message(text=f"Unfortuately, there is not hotel in {slot_value}.")
             return {"city": None}
+
+####action_deactive_sidetrack
+###action_active_sidetrack
+class ActionDeactiveSidetrack(Action):
+
+    def name(self) -> Text:
+        return "action_deactive_sidetrack"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        dispatcher.utter_message(text="[deactive sidetrack]")
+
+        return [SlotSet("sidetrack", False)]
+
+class ActionActiveSidetrack(Action):
+
+    def name(self) -> Text:
+        return "action_active_sidetrack"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        dispatcher.utter_message(text="[active sidetrack]")
+
+        return [SlotSet("sidetrack", True)]
+
+#action_check_for_follow_up
+class ActionCheckForSidetrack(Action):
+
+    def name(self) -> Text:
+        return "action_check_for_sidetrack"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        dispatcher.utter_message(text="[checking for side sidetrack]")
+
+        sidetrack_active = tracker.get_slot("sidetrack")
+        print(f"sidetrack:{sidetrack_active}")
+
+        active_loop = tracker.active_loop
+        print(f"active loop: {active_loop}")
+        print(f"len: {len(active_loop)}")
+
+        if len(active_loop) == 0:
+            if sidetrack_active:
+                print("initial question should be activated again")
+                return[FollowupAction(name="utter_how_to_proceed")]
+        else:
+            if sidetrack_active:
+                print("returning to sequence before")
+                return [Form("process_book")]
+            else:
+                print("do not interrupt")
+                return []
+
+

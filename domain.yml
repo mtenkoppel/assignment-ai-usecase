@@ -6,29 +6,30 @@ session_config:
   carry_over_slots_to_new_session: false
 
 intents:
-  - greet
-  - abort
-  - talk_to_human
-  - change_num_nights
-  - change_date
-  - change_location
-  - affirm
-  - deny
-  - book_hotel
-  - faq
-  - chitchat
-  - inform
-  - reset
-  - yes_talk
-  - no_talk
-  - continue_processing_form
-  - breakfast_yes
-  - breakfast_no
-  - payment_on_location
-  - payment_online
-  - ask_question
-  - bookconfirm_yes
-  - bookconfirm_no
+  - session_start             # whenever the session starts the user is greeted with an utterance
+  - greet                     # will be handled by entering chat
+  - abort                     # allows user to abort form at any stage
+  - talk_to_human             # allows user to talk to a human at any stage
+  - change_num_nights         # user wants to make a change to the booking
+  - change_date               # user wants to make a change to the booking
+  - change_location           # user wants to make a change to the booking
+  - affirm                    # user confirms to a question
+  - deny                      # user declines to a question
+  - book_hotel                # user expresses he wants to book a room
+  - faq                       # user has questions about the hotel or room
+  - chitchat                  # user wants to challenge the bot with chitchat
+  - inform                    # required for code
+  - reset                     # assessor may reset
+  - yes_talk                  # technically required
+  - no_talk                   # technically required
+  - continue_processing_form  # technically required
+  - breakfast_yes             # technically required
+  - breakfast_no              # technically required
+  - payment_on_location       # technically required
+  - payment_online            # technically required
+  - ask_question              # technically required
+  - bookconfirm_yes           # technically required
+  - bookconfirm_no            # technically required
 
 # responses that start with utter_ do not need further indexing in domain
 responses:
@@ -213,6 +214,11 @@ slots:
     type: text
     auto_fill: false
     influence_conversation: false
+  sidetrack:
+    type: bool
+    initial_value: false
+    auto_fill: false
+    influence_conversation: false
 
 actions:
   - action_hello_world
@@ -220,3 +226,6 @@ actions:
   - action_process_offer
   - reset_form_values
   - validate_book_form
+  - action_deactive_sidetrack
+  - action_active_sidetrack
+  - action_check_for_sidetrack

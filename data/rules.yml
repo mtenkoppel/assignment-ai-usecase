@@ -1,12 +1,22 @@
 rules:
+
+  - rule: User enters the chat and a subtle push in right direction
+    steps:
+    - intent: greet
+    - action: utter_welcome_part1
+    - action: utter_welcome_part2
+
   - rule: respond to FAQs type questions
     steps:
     - intent: faq
     - action: utter_faq
+    - action: action_check_for_sidetrack
+
   - rule: respond to chitchat
     steps:
     - intent: chitchat
     - action: utter_chitchat
+    - action: action_check_for_sidetrack
 
 # BOOKING PART 1 - ENTERING BASIC ITERNARY DATA
 
@@ -103,6 +113,8 @@ rules:
     - action: process_book
     - active_loop: process_book
 
+
+
 ## ALLOW FOR CANCELING THE FORM
   - rule: The user is in the booking form and wants to abort the process
     condition:
@@ -143,12 +155,17 @@ rules:
 
 ## GENERAL INTENTS
 
-
+# FOCUS
+# FOCUS
 # activate asking a question
-  - rule: user has a question to the hotel
+  - rule: user clicks button that he has a question to the hotel
+    condition:
+      - active_loop: process_book
     steps:
-      - intent: ask_question
-      - action: utter_ask_your_question
+    - intent: ask_question
+    - active_loop: null
+    - action: action_active_sidetrack
+    - action: utter_ask_your_question
 
 # reset chatbot
   - rule: user wants to reset and start over
